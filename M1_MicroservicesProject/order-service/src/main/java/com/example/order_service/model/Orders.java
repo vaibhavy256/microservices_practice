@@ -17,12 +17,34 @@ public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String ordernumber;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLineItems> orderLineItems;
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getOrdernumber() {
+        return ordernumber;
+    }
+
+    public void setOrdernumber(String ordernumber) {
+        this.ordernumber = ordernumber;
+    }
+
+    public List<OrderLineItems> getOrderLineItems() {
+        return orderLineItems;
+    }
+
+    public void setOrderLineItems(List<OrderLineItems> orderLineItems) {
+        this.orderLineItems = orderLineItems;
+    }
 }
