@@ -1,0 +1,7 @@
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\controller\ProductController.java
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\dto\ProductRequest.java
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\dto\ProductResponse.java
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\model\Product.java
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\ProductServiceApplication.java
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\reposioty\ProductRepository.java
+G:\SpringBoot_Microservices_Projects\M1_MicroservicesProject\microservice_new\product-service\src\main\java\com\example\productservice\product_service\service\ProductService.java
