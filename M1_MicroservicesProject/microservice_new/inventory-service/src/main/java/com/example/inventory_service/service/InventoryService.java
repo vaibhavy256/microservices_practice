@@ -1,14 +1,17 @@
 package com.example.inventory_service.service;
 
+import com.example.inventory_service.dto.InventoryResponse;
+import com.example.inventory_service.entity.Inventory;
 import com.example.inventory_service.repository.InventoryRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
 @Service
 public class InventoryService {
 
@@ -16,7 +19,16 @@ public class InventoryService {
     InventoryRepository inventoryRepository;
 
     @Transactional
-    public boolean isInStock(String skuCode){
-        return inventoryRepository.findBySkuCode(skuCode).isPresent();
+    public List<InventoryResponse> isInStock(List<String> skuCode) {
+        log.info("Checking Inventory");
+        List<Inventory> inventories = inventoryRepository.findBySkuCodeIn(skuCode);
+        List<InventoryResponse> inventoryResponses = new ArrayList<>();
+        for (Inventory inventory : inventories) {
+            InventoryResponse response = new InventoryResponse();
+            response.setSkuCode(inventory.getSkuCode());
+            response.setInStock(inventory.getQuantity() > 0);
+            inventoryResponses.add(response);
+        }
+        return inventoryResponses;
     }
 }
