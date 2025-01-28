@@ -1,8 +1,10 @@
 package com.example.journal.journalApp.controller;
 
 import com.example.journal.journalApp.entity.JournalEntry;
+import com.example.journal.journalApp.entity.User;
 import com.example.journal.journalApp.repository.JournalEntryRepository;
 import com.example.journal.journalApp.service.JournalEntryService;
+import com.example.journal.journalApp.service.UserEntryService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +23,9 @@ public class JournalEntryController {
     @Autowired
     JournalEntryService journalEntryService;
 
+    @Autowired
+    UserEntryService userEntryService;
+
     @PostMapping("/add")
     public ResponseEntity<JournalEntry> addJournal(@RequestBody JournalEntry journalEntry){
         try{
@@ -34,9 +39,10 @@ public class JournalEntryController {
 
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?>getAll(){
-        List<JournalEntry>allEntries=journalEntryService.getAllJournalEntries();
+    @GetMapping("{userName}")
+    public ResponseEntity<?>getAllJournalEntriesOfUser(@PathVariable String userName){
+        User user=userEntryService.findByUserName(userName);
+        List<JournalEntry>allEntries=user.getJournalEntries();
         if(allEntries!=null && !allEntries.isEmpty()){
             return new ResponseEntity<>(allEntries,HttpStatus.FOUND);
         }
