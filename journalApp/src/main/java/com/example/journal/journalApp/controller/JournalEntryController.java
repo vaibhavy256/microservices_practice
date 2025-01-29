@@ -26,11 +26,10 @@ public class JournalEntryController {
     @Autowired
     UserEntryService userEntryService;
 
-    @PostMapping("/add")
-    public ResponseEntity<JournalEntry> addJournal(@RequestBody JournalEntry journalEntry){
+    @PostMapping("/add/{username}")
+    public ResponseEntity<JournalEntry> addJournal(@RequestBody JournalEntry journalEntry,@PathVariable String username){
         try{
-            journalEntry.setDate(LocalDateTime.now());
-            journalEntryService.saveEntry(journalEntry);
+            journalEntryService.saveEntry(journalEntry,username);
             return new ResponseEntity<>(journalEntry, HttpStatus.OK) ;
         }
         catch(Exception e){
@@ -58,8 +57,12 @@ public class JournalEntryController {
         return new ResponseEntity<JournalEntry>(entries,HttpStatus.FOUND);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateEntry(@PathVariable ObjectId id,@RequestBody JournalEntry newEntry){
+    @PutMapping("/update/{id}/{username}")
+    public ResponseEntity<?> updateEntry(
+            @PathVariable ObjectId id,
+            @RequestBody JournalEntry newEntry,
+            @PathVariable String username
+    ){
         JournalEntry old=journalEntryService.getJournalById(id);
         if(old!=null){
             old.setTitle(newEntry.getTitle()!=null && !newEntry.getTitle().equals("")?newEntry.getTitle():old.getTitle());
@@ -69,6 +72,11 @@ public class JournalEntryController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+    }
+
+    public ResponseEntity<?>deleteJournalById(@PathVariable ObjectId id,String username){
+        journalEntryService.deleteEntry(id,username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

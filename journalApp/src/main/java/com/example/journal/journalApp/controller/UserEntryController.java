@@ -50,7 +50,7 @@ public class UserEntryController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateEntry(@PathVariable ObjectId id,@RequestBody User user){
+    public ResponseEntity<?> updateUserEntry(@PathVariable ObjectId id,@RequestBody User user){
         User old=userEntryService.findByUserName(user.getUserName());
         if(old!=null){
             old.setUserName(user.getUserName()!=null && !user.getUserName().equals("")?user.getUserName():old.getUserName());
