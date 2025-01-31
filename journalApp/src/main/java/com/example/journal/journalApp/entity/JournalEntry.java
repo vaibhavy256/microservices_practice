@@ -1,5 +1,6 @@
 package com.example.journal.journalApp.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -9,9 +10,10 @@ import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
 
-@Document
+@Document(collection = "journal_entries")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class JournalEntry {
     @Id
     private ObjectId id;
@@ -19,37 +21,4 @@ public class JournalEntry {
     private String title;
     private String content;
     private LocalDateTime date;
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @NonNull
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(@NonNull String title) {
-        this.title = title;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
 }

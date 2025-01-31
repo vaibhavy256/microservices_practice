@@ -16,19 +16,24 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
-    private final UserEntryService userEntryService;
+    @Autowired
+    private UserEntryService userEntryService;
 
-    public JournalEntryService(UserEntryService userEntryService) {
-        this.userEntryService = userEntryService;
-    }
+//    public JournalEntryService(UserEntryService userEntryService) {
+//        this.userEntryService = userEntryService;
+//    }
 
-    @Transactional
+
     public void saveEntry(JournalEntry journalEntry, String username){
-        User user=userEntryService.findByUserName(username);
-        journalEntry.setDate(LocalDateTime.now());
-        JournalEntry myEntry= journalEntryRepository.save(journalEntry);
-        user.getJournalEntries().add(myEntry);
-        userEntryService.saveEntry(user);
+        try {
+            User user = userEntryService.findByUserName(username);
+            journalEntry.setDate(LocalDateTime.now());
+            JournalEntry saved = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            userEntryService.saveUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while saving the entry.", e);
+        }
     }
 
     public void saveEntry(JournalEntry old) {
@@ -46,7 +51,7 @@ public class JournalEntryService {
     public void deleteEntry(ObjectId id,String username){
         User user=userEntryService.findByUserName(username);
         user.getJournalEntries().removeIf(x->x.getId().equals(id));
-        userEntryService.saveEntry(user);
+        userEntryService.saveNewUser(user);
         journalEntryRepository.deleteById(id);
     }
 

@@ -8,6 +8,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,29 +21,7 @@ public class UserEntryController {
     @Autowired
     UserEntryService userEntryService;
 
-    @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user){
-        try{
-            userEntryService.saveEntry(user);
-            return new ResponseEntity<>(user, HttpStatus.OK) ;
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<?>getAll(){
-        List<User> allEntries=userEntryService.getAllUserEntries();
-        if(allEntries!=null && !allEntries.isEmpty()){
-            return new ResponseEntity<>(allEntries,HttpStatus.FOUND);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-    }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<User> getById(@PathVariable ObjectId id){
@@ -49,13 +29,15 @@ public class UserEntryController {
         return new ResponseEntity<User>(entries,HttpStatus.FOUND);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateUserEntry(@PathVariable ObjectId id,@RequestBody User user){
-        User old=userEntryService.findByUserName(user.getUserName());
+    @PutMapping("/update/")
+    public ResponseEntity<?> updateUserEntry(@RequestBody User user){
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String userName=authentication.getName();
+        User old=userEntryService.findByUserName(userName);
         if(old!=null){
             old.setUserName(user.getUserName()!=null && !user.getUserName().equals("")?user.getUserName():old.getUserName());
             old.setPassword(user.getPassword()!=null && !user.getPassword().equals("")?user.getPassword(): old.getPassword());
-            userEntryService.saveEntry(old);
+            userEntryService.saveNewUser(old);
             return new ResponseEntity<>(old,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
